@@ -1,8 +1,8 @@
 <?php
 $modo = 'producao';  
-$client_id = "SEU_CLIENT_ID";
-$client_secret = "SEU_CLIENT_SECRET";
-$chave_pix = "SUA_CHAVE_PIX";
+$client_id = "Client_Id_70dd1cbe4847e2767982dd1f55a288b03e7a03e9";
+$client_secret = "Client_Secret_e44ff3d9244a8fd007998e151c27afb43b6e4a91";
+$chave_pix = "ca0d24f8-639a-4502-abed-d516dd1abd95";
 $certificado = __DIR__ . "/producao.pem";
 
 $nome = $_POST['nome'];
