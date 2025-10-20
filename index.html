@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bolão - Quero Participar</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { display:flex; justify-content:center; align-items:center; min-height:100vh; background:#f5f5f5; padding:20px; }
-    .container { background:#fff; padding:30px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.1); max-width:350px; width:100%; text-align:center; }
-    h2 { color:#005A9C; margin-bottom:25px; }
-    form { display:flex; flex-direction:column; gap:15px; }
-    input { padding:12px; border-radius:8px; border:1px solid #ccc; font-size:16px; width:100%; }
-    input:focus { border-color:#005A9C; outline:none; box-shadow:0 0 0 3px rgba(0,90,156,0.2); }
-    button { padding:15px; background:#005A9C; color:#fff; font-weight:bold; border:none; border-radius:8px; cursor:pointer; transition:background 0.3s; }
-    button:hover { background:#004080; }
-    #pixArea { margin-top:20px; display:none; }
-    #pixArea img { max-width:200px; width:100%; margin-bottom:10px; }
-    @media (max-width:400px){ .container{padding:20px;} input,button{font-size:14px; padding:12px;} }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolão - Quero Participar</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="card">
+    <h2>🎯 Participar do Bolão</h2>
+    <p class="hint">Preencha seus dados abaixo e confirme sua inscrição.</p>
 
-<div class="container">
-  <h2>Entre para o bolão!</h2>
+    <input id="nome" type="text" placeholder="Seu nome completo" required>
+    <input id="telefone" type="tel" placeholder="(11) 9xxxx-xxxx" required>
 
-  <form id="formBolao">
-    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
-    <input type="tel" id="telefone" name="telefone" placeholder="Seu WhatsApp (DDD + 9 dígitos)" required>
-    <button type="button" id="btnParticipar">Quero Participar</button>
-  </form>
+    <!-- Campo com valor fixo -->
+    <div class="valorBox">
+      Valor da cota: <strong>R$ <span id="valor">85,00</span></strong>
+    </div>
 
-  <div id="pixArea">
-    <h3>Escaneie o QR Code</h3>
-    <img id="qrCode" alt="QR Code Pix">
-    <p id="copiaCola"></p>
+    <button id="btn">Quero Participar</button>
+
+    <p id="msg" class="hint"></p>
   </div>
-</div>
 
-<script src="main.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
