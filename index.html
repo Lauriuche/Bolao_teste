@@ -8,163 +8,208 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Ícones FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <!-- Fontes Google -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #ffffff; /* Fundo branco para eliminar bordas visuais */
+            background-color: #ffffff;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
             color: #000;
         }
 
-        /* Container Principal Responsivo */
+        /* Container Principal */
         .main-container {
             width: 100%;
-            /* Em telas muito grandes, limita a largura do conteúdo para não esticar demais, 
-               mas o fundo continua branco (sem borda visível) */
-            max-width: 550px; 
+            max-width: 500px; /* Largura máxima ideal para emular celular no PC */
             margin: 0 auto;
             position: relative;
             background-color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            /* Sombra suave apenas no Desktop */
+            box-shadow: 0 0 0px rgba(0,0,0,0);
+        }
+        @media (min-width: 500px) {
+            .main-container {
+                box-shadow: 0 0 30px rgba(0,0,0,0.05);
+                border-left: 1px solid #f0f0f0;
+                border-right: 1px solid #f0f0f0;
+            }
         }
 
-        /* Ajuste para elementos fixos (Topo e Rodapé) acompanharem a largura do conteúdo */
+        /* Constraints Fixos */
         .fixed-constraint {
             width: 100%;
-            max-width: 550px; /* Mesma largura do container */
-            margin: 0 auto; /* Centraliza */
+            max-width: 500px;
+            margin: 0 auto;
             left: 0;
             right: 0;
         }
 
-        /* Classes Utilitárias */
+        /* Story Ring (Gradiente do Insta) */
         .story-ring {
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            padding: 3px;
+            padding: 2px;
             border-radius: 50%;
         }
         .story-ring img {
-            border: 3px solid white; 
+            border: 2px solid white; 
             background-color: white;
+            display: block;
         }
 
-        .link-card:active {
+        /* Botões do Perfil */
+        .action-btn {
+            background-color: #efefef;
+            color: #000;
+            font-weight: 600;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .action-btn:active {
+            background-color: #dbdbdb;
+            opacity: 0.7;
+        }
+
+        /* Tabs de Navegação */
+        .nav-tab {
+            border-bottom: 1px solid #dbdbdb;
+            color: #8e8e8e;
+            cursor: pointer;
+        }
+        .nav-tab.active {
+            border-bottom: 1px solid #000;
+            color: #000;
+        }
+
+        /* Links */
+        .link-item {
+            transition: background-color 0.2s;
+            border: 1px solid #efefef;
+        }
+        .link-item:active {
+            background-color: #f5f5f5;
             transform: scale(0.99);
-            background-color: #f9fafb;
         }
-        
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body>
 
     <div class="main-container">
         
-        <!-- BARRA SUPERIOR (Fixa) -->
-        <div class="fixed top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-4 py-3 flex justify-between items-center fixed-constraint">
+        <!-- BARRA SUPERIOR (Nome do Usuário) -->
+        <div class="fixed top-0 z-50 bg-white/98 backdrop-blur-sm border-b border-gray-100 px-4 py-2 flex justify-between items-center fixed-constraint h-[44px]">
             <div class="flex items-center gap-1">
-                <i class="fas fa-lock text-xs mt-1"></i>
-                <h1 class="font-bold text-lg truncate" id="username">...</h1>
+                <i class="fas fa-lock text-[10px] mt-0.5"></i>
+                <h1 class="font-bold text-lg truncate leading-none" id="username">...</h1>
                 <i class="fas fa-chevron-down text-xs ml-1 text-gray-500"></i>
             </div>
-            <div class="flex gap-5 text-xl items-center">
-                <i class="far fa-plus-square hover:text-gray-600 cursor-pointer"></i>
-                <i class="fas fa-bars hover:text-gray-600 cursor-pointer"></i>
+            <div class="flex gap-6 text-xl items-center text-gray-800">
+                <i class="far fa-plus-square cursor-pointer"></i>
+                <i class="fas fa-bars cursor-pointer"></i>
             </div>
         </div>
 
-        <!-- Espaçador para compensar a barra fixa -->
-        <div class="h-16"></div>
+        <div class="h-[44px]"></div> <!-- Espaçador -->
 
-        <!-- CONTEÚDO SCROLLÁVEL -->
+        <!-- CONTEÚDO -->
         <div class="flex-1 w-full flex flex-col">
             
             <!-- CABEÇALHO DO PERFIL -->
-            <div class="px-4 pt-2 pb-2">
-                <div class="flex items-center justify-between mb-4">
-                    <!-- Foto -->
-                    <div class="story-ring w-20 h-20 md:w-24 md:h-24 flex-shrink-0 cursor-pointer">
+            <div class="px-4 pt-3 pb-2">
+                <div class="flex items-center justify-between mb-3">
+                    <!-- Foto (Aumentada em ~20%) -->
+                    <div class="story-ring w-[104px] h-[104px] flex-shrink-0 cursor-pointer">
                         <img id="profile-img" src="" alt="Profile" class="w-full h-full rounded-full object-cover">
                     </div>
 
                     <!-- Números -->
-                    <div class="flex flex-1 justify-around text-center ml-2 md:ml-6">
+                    <div class="flex flex-1 justify-around text-center ml-4">
                         <div class="cursor-pointer">
-                            <div class="font-bold text-lg md:text-xl" id="posts-count">0</div>
-                            <div class="text-xs md:text-sm text-gray-500">Posts</div>
+                            <div class="font-bold text-lg leading-tight" id="posts-count">0</div>
+                            <div class="text-[13px] text-gray-600">Posts</div>
                         </div>
                         <div class="cursor-pointer">
-                            <div class="font-bold text-lg md:text-xl" id="followers-count">0</div>
-                            <div class="text-xs md:text-sm text-gray-500">Seguidores</div>
+                            <div class="font-bold text-lg leading-tight" id="followers-count">0</div>
+                            <div class="text-[13px] text-gray-600">Seguidores</div>
                         </div>
                         <div class="cursor-pointer">
-                            <div class="font-bold text-lg md:text-xl" id="following-count">0</div>
-                            <div class="text-xs md:text-sm text-gray-500">Seguindo</div>
+                            <div class="font-bold text-lg leading-tight" id="following-count">0</div>
+                            <div class="text-[13px] text-gray-600">Seguindo</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Texto da Bio -->
-                <div class="mb-5">
-                    <h2 class="font-bold text-sm md:text-base" id="display-name">...</h2>
-                    <div class="text-sm md:text-base text-gray-800 whitespace-pre-line leading-snug mt-1" id="bio-text">...</div>
-                    <a href="#" class="text-blue-900 text-sm font-semibold mt-1 block hover:underline truncate" id="bio-link">...</a>
+                <!-- Bio -->
+                <div class="mb-4">
+                    <!-- Nome aumentado para text-lg (maior destaque) -->
+                    <h2 class="font-bold text-lg" id="display-name">...</h2>
+                    <div class="text-sm text-gray-900 whitespace-pre-line leading-tight mt-0.5" id="bio-text">...</div>
+                    <a href="#" class="text-[#00376b] text-sm font-semibold mt-0.5 block truncate" id="bio-link">...</a>
                 </div>
 
                 <!-- Botões de Ação -->
-                <div class="flex gap-2 mb-6 text-sm font-semibold">
-                    <button class="bg-gray-100 text-black rounded-lg py-2 flex-1 hover:bg-gray-200 transition active:bg-gray-300">Seguir</button>
-                    <button class="bg-gray-100 text-black rounded-lg py-2 flex-1 hover:bg-gray-200 transition active:bg-gray-300">Mensagem</button>
-                    <button class="bg-gray-100 text-black rounded-lg px-3 py-2 hover:bg-gray-200 transition active:bg-gray-300"><i class="fas fa-user-plus"></i></button>
+                <div class="flex gap-2 mb-4">
+                    <button class="action-btn flex-1 py-1.5">Seguir</button>
+                    <button class="action-btn flex-1 py-1.5">Mensagem</button>
+                    <button class="action-btn px-2 py-1.5"><i class="fas fa-user-plus text-xs"></i></button>
                 </div>
 
                 <!-- Destaques -->
-                <div class="flex gap-4 overflow-x-auto pb-2 mb-2 scrollbar-hide px-1" id="highlights-container">
-                    <!-- JS Preenche aqui -->
+                <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide px-1" id="highlights-container">
+                    <!-- JS -->
                 </div>
             </div>
 
-            <!-- DIVISOR -->
-            <div class="border-t border-gray-100 mb-2"></div>
-
-            <!-- ÁREA DE LINKS -->
-            <div class="px-4 flex flex-col gap-3 pb-24 w-full" id="links-wrapper">
-                <!-- Links JS -->
+            <!-- MENU DE ABAS (Grid, Reels, Tags) -->
+            <div class="flex border-t border-gray-200 mt-2 sticky top-[44px] bg-white z-40">
+                <div class="flex-1 flex justify-center items-center py-2.5 nav-tab active">
+                    <i class="fas fa-th text-lg"></i>
+                </div>
+                <div class="flex-1 flex justify-center items-center py-2.5 nav-tab">
+                    <i class="fas fa-video text-lg"></i>
+                </div>
+                <div class="flex-1 flex justify-center items-center py-2.5 nav-tab">
+                    <i class="fas fa-user-tag text-lg"></i>
+                </div>
             </div>
-            
-            <!-- Créditos -->
-            <div class="text-center pb-8 pt-4">
-                <p class="text-gray-300 text-[10px] uppercase tracking-wider font-semibold">© 2026 Vagner Lauriuche</p>
+
+            <!-- CONTEÚDO DA ABA (Links em Formato de Lista) -->
+            <div class="bg-white min-h-[300px]">
+                <!-- Lista de Links -->
+                <div class="px-0 flex flex-col" id="links-wrapper">
+                    <!-- Links serão inseridos aqui -->
+                </div>
+
+                <!-- Créditos Rodapé -->
+                <div class="text-center py-10">
+                    <p class="text-gray-300 text-[10px] uppercase tracking-wider font-semibold">© 2026 Vagner Lauriuche</p>
+                </div>
             </div>
         </div>
 
-        <!-- MENU INFERIOR (Fixo) -->
+        <!-- BARRA INFERIOR (Footer App) -->
         <div class="fixed bottom-0 z-50 bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center fixed-constraint pb-safe">
-            <i class="fas fa-home text-2xl text-black cursor-pointer hover:scale-110 transition"></i>
-            <i class="fas fa-search text-2xl text-gray-300 cursor-pointer hover:text-gray-500 hover:scale-110 transition"></i>
-            <i class="far fa-plus-square text-2xl text-gray-300 cursor-pointer hover:text-gray-500 hover:scale-110 transition"></i>
-            <i class="fas fa-heart text-2xl text-gray-300 cursor-pointer hover:text-gray-500 hover:scale-110 transition"></i>
-            <div class="w-7 h-7 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border border-black p-[1px] cursor-pointer hover:scale-110 transition">
-                <img id="footer-img" src="" class="w-full h-full rounded-full">
+            <i class="fas fa-home text-2xl text-black"></i>
+            <i class="fas fa-search text-2xl text-gray-500"></i>
+            <i class="far fa-plus-square text-2xl text-gray-500"></i>
+            <i class="fas fa-heart text-2xl text-gray-500"></i>
+            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border border-gray-300">
+                <img id="footer-img" src="" class="w-full h-full object-cover">
             </div>
         </div>
 
     </div>
 
-    <!-- SCRIPT -->
+    <!-- SCRIPT DE DADOS -->
     <script>
         const perfil = {
             usuario: "Vagner_lauriuche",
@@ -173,37 +218,35 @@
             posts: "1.2k",
             seguidores: "5M",
             seguindo: "500",
-            bio: `Empresário | Criador de Conteúdo
-📍 São Paulo, Brasil
-🚀 Ajudando você a crescer online
-👇 Clique nos links abaixo para saber mais!`,
+            bio: `• 🐄|Bacharel Zootecnia
+• 🚜|MBA Agronegócios
+• 🧪|MBA Agronegocios: Indústria, Produto e Inovação
+• 📊|ADM - Administração 
+• ✨|𝐕𝐂𝐂: 𝐕𝐢𝐬𝐮𝐚𝐥 𝐂𝐨𝐧𝐭𝐞𝐧𝐭 𝐂𝐫𝐞𝐚𝐭𝐨𝐫`,
             linkBio: "link.da.bio/vagner",
             
             categorias: [
                 {
                     titulo: "Contato & Redes Sociais",
-                    icone: "fas fa-users",
                     links: [
-                        { titulo: "WhatsApp", subtitulo: "Fale comigo", url: "https://wa.me/5511999999999", icone: "fab fa-whatsapp", corIcone: "text-green-600", bgIcone: "bg-green-100" },
-                        { titulo: "Instagram", subtitulo: "@Vagner_lauriuche", url: "https://instagram.com/Vagner_lauriuche", icone: "fab fa-instagram", corIcone: "text-pink-600", bgIcone: "bg-pink-100" },
-                        { titulo: "Facebook", subtitulo: "Página Oficial", url: "https://facebook.com", icone: "fab fa-facebook", corIcone: "text-blue-700", bgIcone: "bg-blue-100" },
-                        { titulo: "Threads", subtitulo: "Conversas em texto", url: "https://threads.net", icone: "fa-brands fa-threads", corIcone: "text-black", bgIcone: "bg-gray-100" }
+                        { titulo: "WhatsApp", subtitulo: "Fale comigo", url: "https://wa.me/5511999999999", icone: "fab fa-whatsapp", corIcone: "text-white", bgIcone: "bg-[#25D366]" },
+                        { titulo: "Instagram", subtitulo: "@Vagner_lauriuche", url: "https://instagram.com/Vagner_lauriuche", icone: "fab fa-instagram", corIcone: "text-white", bgIcone: "bg-gradient-to-tr from-[#f09433] to-[#bc1888]" },
+                        { titulo: "Facebook", subtitulo: "Página Oficial", url: "https://facebook.com", icone: "fab fa-facebook-f", corIcone: "text-white", bgIcone: "bg-[#1877F2]" },
+                        { titulo: "Threads", subtitulo: "Conversas", url: "https://threads.net", icone: "fa-brands fa-threads", corIcone: "text-white", bgIcone: "bg-black" }
                     ]
                 },
                 {
                     titulo: "Vídeos & Criação",
-                    icone: "fas fa-play-circle",
                     links: [
-                        { titulo: "TikTok", subtitulo: "Vídeos curtos", url: "https://tiktok.com", icone: "fab fa-tiktok", corIcone: "text-black", bgIcone: "bg-cyan-50" },
-                        { titulo: "Kwai", subtitulo: "Assista no Kwai", url: "https://kwai.com", icone: "fas fa-video", corIcone: "text-orange-500", bgIcone: "bg-orange-50" },
-                        { titulo: "YouTube", subtitulo: "Canal completo", url: "https://youtube.com", icone: "fab fa-youtube", corIcone: "text-red-600", bgIcone: "bg-red-50" }
+                        { titulo: "TikTok", subtitulo: "Vídeos curtos", url: "https://tiktok.com", icone: "fab fa-tiktok", corIcone: "text-white", bgIcone: "bg-black" },
+                        { titulo: "Kwai", subtitulo: "Assista no Kwai", url: "https://kwai.com", icone: "fas fa-video", corIcone: "text-white", bgIcone: "bg-[#ff8f00]" },
+                        { titulo: "YouTube", subtitulo: "Canal completo", url: "https://youtube.com", icone: "fab fa-youtube", corIcone: "text-white", bgIcone: "bg-[#FF0000]" }
                     ]
                 },
                 {
                     titulo: "Outros",
-                    icone: "fas fa-link",
                     links: [
-                        { titulo: "Meu Site", subtitulo: "Portfólio", url: "https://google.com", icone: "fas fa-globe", corIcone: "text-blue-500", bgIcone: "bg-blue-50" }
+                        { titulo: "Meu Site", subtitulo: "Portfólio", url: "https://google.com", icone: "fas fa-globe", corIcone: "text-white", bgIcone: "bg-gray-800" }
                     ]
                 }
             ],
@@ -228,7 +271,9 @@
             const imgProfile = document.getElementById('profile-img');
             const imgFooter = document.getElementById('footer-img');
             
-            imgProfile.onerror = function() { this.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner"; imgFooter.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner"; };
+            // Fallback de imagem
+            const fallback = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner";
+            imgProfile.onerror = function() { this.src = fallback; imgFooter.src = fallback; };
             imgProfile.src = perfil.imagem;
             imgFooter.src = perfil.imagem;
             document.title = `${perfil.nome} (@${perfil.usuario})`;
@@ -236,34 +281,47 @@
             const wrapper = document.getElementById('links-wrapper');
             wrapper.innerHTML = ''; 
 
-            perfil.categorias.forEach(categoria => {
-                const tituloHTML = `<div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mt-5 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2"><i class="${categoria.icone}"></i> ${categoria.titulo}</div>`;
-                wrapper.innerHTML += tituloHTML;
-                const linksContainer = document.createElement('div');
-                linksContainer.className = 'flex flex-col gap-3 w-full';
+            perfil.categorias.forEach((categoria, index) => {
+                // Separador de categoria estilo Insta (Header cinza claro)
+                if(index >= 0) {
+                     const header = `
+                        <div class="px-4 py-2 bg-gray-50 border-b border-t border-gray-100 flex items-center gap-2 mt-0">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">${categoria.titulo}</span>
+                        </div>
+                     `;
+                     wrapper.innerHTML += header;
+                }
+
                 categoria.links.forEach(link => {
                     const html = `
-                    <a href="${link.url}" target="_blank" class="link-card flex items-center p-3.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all w-full group">
-                        <div class="w-11 h-11 ${link.bgIcone} ${link.corIcone} rounded-full flex items-center justify-center text-xl mr-4 flex-shrink-0 group-hover:scale-110 transition-transform">
+                    <a href="${link.url}" target="_blank" class="link-item flex items-center px-4 py-3 bg-white border-b border-gray-100 hover:bg-gray-50">
+                        <div class="w-10 h-10 ${link.bgIcone} ${link.corIcone} rounded-full flex items-center justify-center text-lg mr-3 shadow-sm flex-shrink-0">
                             <i class="${link.icone}"></i>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="font-bold text-sm truncate text-gray-900 mb-0.5">${link.titulo}</div>
-                            <div class="text-xs text-gray-500 truncate font-medium">${link.subtitulo}</div>
+                            <div class="font-semibold text-sm text-gray-900 leading-tight">${link.titulo}</div>
+                            <div class="text-[12px] text-gray-500 leading-tight mt-0.5">${link.subtitulo}</div>
                         </div>
-                        <i class="fas fa-chevron-right text-gray-300 text-sm group-hover:text-gray-500 transition-colors"></i>
+                        <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
                     </a>`;
-                    linksContainer.innerHTML += html;
+                    wrapper.innerHTML += html;
                 });
-                wrapper.appendChild(linksContainer);
             });
 
             const destaquesContainer = document.getElementById('highlights-container');
             destaquesContainer.innerHTML = '';
             perfil.destaques.forEach(destaque => {
-                const bordaClass = destaque.especial ? 'border-2 border-gray-200' : 'border border-gray-300';
-                const bgClass = destaque.especial ? 'bg-white text-gray-400' : 'bg-gray-50';
-                const html = `<div class="flex flex-col items-center gap-1 min-w-[70px] cursor-pointer hover:opacity-80 transition"><div class="w-[70px] h-[70px] rounded-full ${bordaClass} p-[2px]"><div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-2xl">${destaque.emoji}</div></div><span class="text-xs truncate w-full text-center mt-1 font-medium">${destaque.texto}</span></div>`;
+                const bordaClass = destaque.especial ? 'border border-gray-300' : 'border border-gray-200';
+                const bgClass = destaque.especial ? 'bg-white text-gray-800' : 'bg-gray-50 text-gray-800';
+                const html = `
+                <div class="flex flex-col items-center gap-1 min-w-[68px] cursor-pointer hover:opacity-80 transition">
+                    <div class="w-[64px] h-[64px] rounded-full border border-gray-200 p-[2px]">
+                        <div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-2xl border border-gray-100">
+                            ${destaque.emoji}
+                        </div>
+                    </div>
+                    <span class="text-[11px] truncate w-full text-center mt-0.5 text-gray-800 font-normal">${destaque.texto}</span>
+                </div>`;
                 destaquesContainer.innerHTML += html;
             });
         }
@@ -271,5 +329,7 @@
     </script>
 </body>
 </html>
+
+
 
 
