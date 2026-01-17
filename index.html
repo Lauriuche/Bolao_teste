@@ -97,6 +97,53 @@
             transform: scale(0.99);
         }
 
+        /* Modal / Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85); /* Fundo escuro estilo Story */
+            z-index: 100;
+            display: none; /* Escondido por padrão */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.1);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -209,6 +256,35 @@
 
     </div>
 
+    <!-- MODAL POPUP -->
+    <div id="story-modal" class="modal-overlay" onclick="fecharModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="close-btn" onclick="fecharModal(event)">
+                <i class="fas fa-times text-gray-600"></i>
+            </div>
+            
+            <!-- Cabeçalho do Modal -->
+            <div class="h-32 bg-gradient-to-tr from-orange-400 to-pink-600 flex items-center justify-center relative">
+                <div class="absolute -bottom-8 w-20 h-20 rounded-full p-1 shadow-md bg-white">
+                    <div class="w-full h-full bg-gray-100 rounded-full flex items-center justify-center overflow-hidden" id="modal-icon-container">
+                        <!-- Imagem do Perfil via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Corpo do Modal -->
+            <div class="pt-10 pb-8 px-6 text-center">
+                <h3 class="text-xl font-bold mb-3" id="modal-title">Titulo</h3>
+                <div class="text-gray-600 text-sm leading-relaxed" id="modal-body">
+                    Texto
+                </div>
+                <button onclick="fecharModal(event)" class="mt-6 w-full bg-black text-white py-2.5 rounded-lg font-semibold text-sm active:scale-95 transition">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPT DE DADOS -->
     <script>
         const perfil = {
@@ -231,15 +307,15 @@
                     links: [
                         { titulo: "WhatsApp", subtitulo: "Fale comigo", url: "https://wa.me/5511999999999", icone: "fab fa-whatsapp", corIcone: "text-white", bgIcone: "bg-[#25D366]" },
                         { titulo: "Instagram", subtitulo: "@Vagner_lauriuche", url: "https://instagram.com/Vagner_lauriuche", icone: "fab fa-instagram", corIcone: "text-white", bgIcone: "bg-gradient-to-tr from-[#f09433] to-[#bc1888]" },
-                        { titulo: "Facebook", subtitulo: "Página Oficial", url: "https://facebook.com", icone: "fab fa-facebook-f", corIcone: "text-white", bgIcone: "bg-[#1877F2]" },
-                        { titulo: "Threads", subtitulo: "Conversas", url: "https://threads.net", icone: "fa-brands fa-threads", corIcone: "text-white", bgIcone: "bg-black" }
+                        { titulo: "Facebook", subtitulo: "Página Oficial", url: "https://fb.com/Lauriuche", icone: "fab fa-facebook-f", corIcone: "text-white", bgIcone: "bg-[#1877F2]" },
+                        { titulo: "Threads", subtitulo: "Conversas", url: "https://www.threads.net/@vagner_lauriuche", icone: "fa-brands fa-threads", corIcone: "text-white", bgIcone: "bg-black" }
                     ]
                 },
                 {
                     titulo: "Vídeos & Criação",
                     links: [
-                        { titulo: "TikTok", subtitulo: "Vídeos curtos", url: "https://tiktok.com", icone: "fab fa-tiktok", corIcone: "text-white", bgIcone: "bg-black" },
-                        { titulo: "Kwai", subtitulo: "Assista no Kwai", url: "https://kwai.com", icone: "fas fa-video", corIcone: "text-white", bgIcone: "bg-[#ff8f00]" },
+                        { titulo: "TikTok", subtitulo: "Vídeos curtos", url: "https://www.tiktok.com/@vagner_lauriuche?_r=1&_t=ZS-939t2XNlLFp", icone: "fab fa-tiktok", corIcone: "text-white", bgIcone: "bg-black" },
+                        { titulo: "Kwai", subtitulo: "Assista no Kwai", url: "https://k.kwai.com/u/@lauriuche/gMuCktDO", icone: "fas fa-video", corIcone: "text-white", bgIcone: "bg-[#ff8f00]" },
                         { titulo: "YouTube", subtitulo: "Canal completo", url: "https://youtube.com", icone: "fab fa-youtube", corIcone: "text-white", bgIcone: "bg-[#FF0000]" }
                     ]
                 },
@@ -251,11 +327,21 @@
                 }
             ],
             destaques: [
-                { emoji: "🔥", texto: "Dicas" },
-                { emoji: "💼", texto: "Trabalho" },
-                { emoji: "✈️", texto: "Viagens" },
-                { emoji: "👤", texto: "Sobre mim" },
-                { emoji: "➕", texto: "Novo", especial: true }
+                { id: 'dicas', emoji: "🔥", texto: "Dicas" },
+                { id: 'trabalho', emoji: "💼", texto: "Trabalho" },
+                { id: 'viagens', emoji: "✈️", texto: "Viagens" },
+                { 
+                    id: 'sobre', 
+                    emoji: "👤", 
+                    texto: "Sobre mim", 
+                    conteudo: `
+                        <p class="mb-3">Olá! Sou <strong>Vagner Lauriuche</strong>.</p>
+                        <p class="mb-3">Sou um profissional apaixonado pelo <strong>Agronegócio</strong> e pela inovação no campo. Minha formação une a técnica da <strong>Zootecnia</strong> com a visão estratégica da <strong>Administração</strong>.</p>
+                        <p class="mb-3">Com MBAs em Indústria, Produto e Inovação, dedico-me a transformar conhecimento técnico em resultados práticos.</p>
+                        <p>Além disso, como <strong>Visual Content Creator</strong>, compartilho essa paixão através de conteúdos digitais que informam e inspiram.</p>
+                    `
+                },
+                { id: 'novo', emoji: "➕", texto: "Novo", especial: true }
             ]
         };
 
@@ -310,26 +396,63 @@
 
             const destaquesContainer = document.getElementById('highlights-container');
             destaquesContainer.innerHTML = '';
+            
+            // Renderização dos Destaques com Click
             perfil.destaques.forEach(destaque => {
                 const bordaClass = destaque.especial ? 'border border-gray-300' : 'border border-gray-200';
                 const bgClass = destaque.especial ? 'bg-white text-gray-800' : 'bg-gray-50 text-gray-800';
-                const html = `
-                <div class="flex flex-col items-center gap-1 min-w-[68px] cursor-pointer hover:opacity-80 transition">
+                
+                const destaqueElement = document.createElement('div');
+                destaqueElement.className = "flex flex-col items-center gap-1 min-w-[68px] cursor-pointer hover:opacity-80 transition";
+                destaqueElement.onclick = () => abrirModal(destaque); // Evento de Click
+
+                destaqueElement.innerHTML = `
                     <div class="w-[64px] h-[64px] rounded-full border border-gray-200 p-[2px]">
                         <div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-2xl border border-gray-100">
                             ${destaque.emoji}
                         </div>
                     </div>
                     <span class="text-[11px] truncate w-full text-center mt-0.5 text-gray-800 font-normal">${destaque.texto}</span>
-                </div>`;
-                destaquesContainer.innerHTML += html;
+                `;
+                destaquesContainer.appendChild(destaqueElement);
             });
         }
+
+        // Funções do Modal
+        function abrirModal(destaque) {
+            const modal = document.getElementById('story-modal');
+            const iconContainer = document.getElementById('modal-icon-container');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+
+            // --- AQUI ESTÁ A MUDANÇA ---
+            // Em vez do emoji, usa a imagem do perfil
+            iconContainer.innerHTML = `<img src="${perfil.imagem}" class="w-full h-full object-cover" onerror="this.src='https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner'">`;
+            
+            title.innerText = destaque.texto;
+
+            // Configura o corpo
+            if (destaque.id === 'sobre' && destaque.conteudo) {
+                body.innerHTML = destaque.conteudo;
+            } else if (destaque.id === 'novo') {
+                body.innerHTML = "Adicione novos destaques em breve!";
+            } else {
+                body.innerHTML = `<p class="italic text-gray-400">Conteúdo de ${destaque.texto} em breve...</p>`;
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function fecharModal(event) {
+            // Se clicar fora ou no botão fechar
+            if (event) event.stopPropagation();
+            const modal = document.getElementById('story-modal');
+            modal.style.display = 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', renderizarPerfil);
     </script>
 </body>
 </html>
-
-
 
 
