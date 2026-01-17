@@ -1,29 +1,301 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bolão - Quero Participar</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vagner Lauriuche | Bio</title>
+    <!-- Tailwind CSS (Estilos) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Fontes Google -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+        }
+
+        /* Classes Utilitárias Personalizadas */
+        .story-ring {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            padding: 3px;
+            border-radius: 50%;
+        }
+        .story-ring img {
+            border: 3px solid white; 
+            background-color: white;
+        }
+
+        .mobile-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link-card:active {
+            transform: scale(0.98);
+        }
+        
+        /* Esconder scrollbar mas permitir scroll */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <h2>🎯 Participar do Bolão</h2>
-    <p class="hint">Preencha seus dados abaixo e confirme sua inscrição.</p>
+<body class="bg-gray-100">
 
-    <input id="nome" type="text" placeholder="Seu nome completo" required>
-    <input id="telefone" type="tel" placeholder="(11) 9xxxx-xxxx" required>
+    <div class="mobile-container relative">
+        
+        <!-- BARRA SUPERIOR -->
+        <div class="flex justify-between items-center px-4 py-3 border-b border-gray-100 sticky top-0 bg-white z-10">
+            <div class="flex items-center gap-1">
+                <i class="fas fa-lock text-xs mt-1"></i>
+                <h1 class="font-bold text-lg" id="username">carregando...</h1>
+                <i class="fas fa-chevron-down text-xs ml-1 text-gray-500"></i>
+            </div>
+            <div class="flex gap-5 text-xl items-center">
+                <i class="far fa-plus-square"></i>
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
 
-    <!-- Campo com valor fixo -->
-    <div class="valorBox">
-      Valor da cota: <strong>R$ <span id="valor">85,00</span></strong>
+        <!-- CONTEÚDO SCROLLÁVEL -->
+        <div class="flex-1 overflow-y-auto pb-20">
+            
+            <!-- CABEÇALHO DO PERFIL -->
+            <div class="px-4 pt-4 pb-2">
+                <div class="flex items-center justify-between mb-4">
+                    <!-- Foto -->
+                    <div class="story-ring w-24 h-24 flex-shrink-0 cursor-pointer">
+                        <!-- Aqui a imagem será carregada via Javascript -->
+                        <img id="profile-img" src="" alt="Profile" class="w-full h-full rounded-full object-cover">
+                    </div>
+
+                    <!-- Números -->
+                    <div class="flex flex-1 justify-around text-center ml-4">
+                        <div>
+                            <div class="font-bold text-lg" id="posts-count">0</div>
+                            <div class="text-xs text-gray-500">Posts</div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg" id="followers-count">0</div>
+                            <div class="text-xs text-gray-500">Seguidores</div>
+                        </div>
+                        <div>
+                            <div class="font-bold text-lg" id="following-count">0</div>
+                            <div class="text-xs text-gray-500">Seguindo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Texto da Bio -->
+                <div class="mb-4">
+                    <h2 class="font-bold text-sm" id="display-name">...</h2>
+                    <div class="text-sm text-gray-800 whitespace-pre-line leading-tight mt-1" id="bio-text">...</div>
+                    <a href="#" class="text-blue-900 text-sm font-semibold mt-1 block" id="bio-link">...</a>
+                </div>
+
+                <!-- Botões de Ação (Fake) -->
+                <div class="flex gap-2 mb-6 text-sm font-semibold">
+                    <button class="bg-gray-100 text-black rounded-lg py-1.5 flex-1 hover:bg-gray-200 transition">Seguir</button>
+                    <button class="bg-gray-100 text-black rounded-lg py-1.5 flex-1 hover:bg-gray-200 transition">Mensagem</button>
+                    <button class="bg-gray-100 text-black rounded-lg px-2 py-1.5 hover:bg-gray-200 transition"><i class="fas fa-user-plus"></i></button>
+                </div>
+
+                <!-- Destaques -->
+                <div class="flex gap-4 overflow-x-auto pb-2 mb-4 scrollbar-hide px-1" id="highlights-container">
+                    <!-- Preenchido via JS -->
+                </div>
+            </div>
+
+            <!-- DIVISOR -->
+            <div class="border-t border-gray-200 mb-2"></div>
+
+            <!-- ÁREA DE LINKS -->
+            <div class="px-4 flex flex-col gap-3 pb-8">
+                <div class="flex items-center justify-center gap-6 text-2xl text-gray-400 mb-2 border-b border-gray-100 pb-2">
+                    <i class="fas fa-th text-black border-t border-black -mt-[9px] pt-2 text-xs uppercase tracking-widest not-italic font-sans flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        Links
+                    </i>
+                </div>
+
+                <!-- Container dos Links -->
+                <div id="links-container" class="flex flex-col gap-3">
+                    <!-- Links serão inseridos aqui pelo JS -->
+                </div>
+            </div>
+            
+            <!-- Créditos -->
+            <div class="text-center pb-8 pt-4">
+                <p class="text-gray-300 text-[10px] uppercase tracking-wider font-semibold">© 2026 Vagner Lauriuche</p>
+            </div>
+        </div>
+
+        <!-- MENU INFERIOR FIXO -->
+        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center z-20 max-w-[480px] mx-auto">
+            <i class="fas fa-home text-2xl text-black"></i>
+            <i class="fas fa-search text-2xl text-gray-300"></i>
+            <i class="far fa-plus-square text-2xl text-gray-300"></i>
+            <i class="fas fa-heart text-2xl text-gray-300"></i>
+            <div class="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border border-black p-[1px]">
+                <img id="footer-img" src="" class="w-full h-full rounded-full">
+            </div>
+        </div>
+
     </div>
 
-    <button id="btn">Quero Participar</button>
+    <!-- SCRIPT DE CONFIGURAÇÃO (EDITE AQUI) -->
+    <script>
+        // ==========================================
+        //  ÁREA DE CONFIGURAÇÃO - EDITE OS DADOS AQUI
+        // ==========================================
+        const perfil = {
+            usuario: "Vagner_lauriuche",
+            nome: "Vagner Lauriuche",
+            // IMPORTANTE: Coloque sua foto na mesma pasta que este arquivo html e chame ela de 'foto.png'
+            imagem: "foto.png", 
+            posts: "1.2k",
+            seguidores: "5M",
+            seguindo: "500",
+            bio: `Empresário | Criador de Conteúdo
+📍 São Paulo, Brasil
+🚀 Ajudando você a crescer online
+👇 Clique nos links abaixo para saber mais!`,
+            linkBio: "link.da.bio/vagner",
+            
+            // LISTA DE LINKS (Adicione ou remova conforme necessário)
+            links: [
+                {
+                    titulo: "WhatsApp",
+                    subtitulo: "Fale comigo diretamente",
+                    url: "https://wa.me/5511999999999", // Coloque seu número
+                    icone: "fab fa-whatsapp",
+                    corIcone: "text-green-600",
+                    bgIcone: "bg-green-100"
+                },
+                {
+                    titulo: "Meu Site Oficial",
+                    subtitulo: "Veja meu portfólio completo",
+                    url: "https://www.google.com",
+                    icone: "fas fa-globe",
+                    corIcone: "text-blue-600",
+                    bgIcone: "bg-blue-100"
+                },
+                {
+                    titulo: "Canal no YouTube",
+                    subtitulo: "Vídeos novos toda semana",
+                    url: "https://youtube.com",
+                    icone: "fab fa-youtube",
+                    corIcone: "text-red-600",
+                    bgIcone: "bg-red-100"
+                },
+                {
+                    titulo: "Como Chegar",
+                    subtitulo: "Localização no Maps",
+                    url: "https://maps.google.com",
+                    icone: "fas fa-map-marker-alt",
+                    corIcone: "text-purple-600",
+                    bgIcone: "bg-purple-100"
+                }
+            ],
 
-    <p id="msg" class="hint"></p>
-  </div>
+            // DESTAQUES (Bolinhas redondas)
+            destaques: [
+                { emoji: "🔥", texto: "Dicas" },
+                { emoji: "💼", texto: "Trabalho" },
+                { emoji: "✈️", texto: "Viagens" },
+                { emoji: "➕", texto: "Novo", especial: true }
+            ]
+        };
 
-  <script src="script.js"></script>
+        // ==========================================
+        //  LÓGICA DO SISTEMA (NÃO PRECISA MEXER)
+        // ==========================================
+        function renderizarPerfil() {
+            // Preencher textos básicos
+            document.getElementById('username').innerText = perfil.usuario;
+            document.getElementById('display-name').innerText = perfil.nome;
+            document.getElementById('posts-count').innerText = perfil.posts;
+            document.getElementById('followers-count').innerText = perfil.seguidores;
+            document.getElementById('following-count').innerText = perfil.seguindo;
+            document.getElementById('bio-text').innerText = perfil.bio;
+            document.getElementById('bio-link').innerText = perfil.linkBio;
+            
+            // Imagens com verificação de erro (caso a foto não esteja na pasta)
+            const imgProfile = document.getElementById('profile-img');
+            const imgFooter = document.getElementById('footer-img');
+            
+            const setImages = (src) => {
+                imgProfile.src = src;
+                imgFooter.src = src;
+            };
+
+            imgProfile.onerror = function() {
+                // Se a foto não for encontrada, usa um avatar padrão
+                this.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner";
+                imgFooter.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner";
+            };
+
+            setImages(perfil.imagem);
+            
+            document.title = `${perfil.nome} (@${perfil.usuario})`;
+
+            // Renderizar Links
+            const linksContainer = document.getElementById('links-container');
+            linksContainer.innerHTML = ''; 
+
+            perfil.links.forEach(link => {
+                const html = `
+                <a href="${link.url}" target="_blank" class="link-card flex items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all">
+                    <div class="w-10 h-10 ${link.bgIcone} ${link.corIcone} rounded-full flex items-center justify-center text-xl mr-3 flex-shrink-0">
+                        <i class="${link.icone}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-semibold text-sm truncate text-gray-900">${link.titulo}</div>
+                        <div class="text-xs text-gray-500 truncate">${link.subtitulo}</div>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+                </a>
+                `;
+                linksContainer.innerHTML += html;
+            });
+
+            // Renderizar Destaques
+            const destaquesContainer = document.getElementById('highlights-container');
+            destaquesContainer.innerHTML = '';
+
+            perfil.destaques.forEach(destaque => {
+                const bordaClass = destaque.especial ? 'border-2 border-gray-100' : 'border border-gray-300';
+                const bgClass = destaque.especial ? 'bg-white border border-gray-300 text-gray-400' : 'bg-gray-100';
+                
+                const html = `
+                <div class="flex flex-col items-center gap-1 min-w-[64px] cursor-pointer hover:opacity-80 transition">
+                    <div class="w-16 h-16 rounded-full ${bordaClass} p-0.5">
+                        <div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-xl">
+                            ${destaque.emoji}
+                        </div>
+                    </div>
+                    <span class="text-xs truncate w-16 text-center">${destaque.texto}</span>
+                </div>
+                `;
+                destaquesContainer.innerHTML += html;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderizarPerfil);
+    </script>
 </body>
 </html>
+
+
