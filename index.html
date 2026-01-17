@@ -14,25 +14,34 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f3f4f6; /* Cinza um pouco mais escuro para contraste */
-            overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+            background-color: #ffffff; /* Fundo branco para eliminar bordas visuais */
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
+            color: #000;
         }
 
-        /* Container Principal */
-        .mobile-container {
+        /* Container Principal Responsivo */
+        .main-container {
             width: 100%;
-            max-width: 480px; /* Mantém o formato de "app" */
+            /* Em telas muito grandes, limita a largura do conteúdo para não esticar demais, 
+               mas o fundo continua branco (sem borda visível) */
+            max-width: 550px; 
             margin: 0 auto;
+            position: relative;
             background-color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            position: relative;
-            
-            /* Sombra suave nas laterais quando visto no PC */
-            box-shadow: 0 0 25px rgba(0,0,0,0.1); 
+        }
+
+        /* Ajuste para elementos fixos (Topo e Rodapé) acompanharem a largura do conteúdo */
+        .fixed-constraint {
+            width: 100%;
+            max-width: 550px; /* Mesma largura do container */
+            margin: 0 auto; /* Centraliza */
+            left: 0;
+            right: 0;
         }
 
         /* Classes Utilitárias */
@@ -47,7 +56,8 @@
         }
 
         .link-card:active {
-            transform: scale(0.98);
+            transform: scale(0.99);
+            background-color: #f9fafb;
         }
         
         .scrollbar-hide::-webkit-scrollbar {
@@ -57,90 +67,81 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-
-        /* Ajuste para o rodapé e cabeçalho fixos não "vazarem" a largura */
-        .fixed-width-constraint {
-            max-width: 480px;
-            width: 100%;
-            margin: 0 auto;
-            left: 0;
-            right: 0;
-        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
 
-    <div class="mobile-container">
+    <div class="main-container">
         
         <!-- BARRA SUPERIOR (Fixa) -->
-        <div class="fixed top-0 z-30 bg-white border-b border-gray-100 px-4 py-3 flex justify-between items-center fixed-width-constraint shadow-sm">
+        <div class="fixed top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-4 py-3 flex justify-between items-center fixed-constraint">
             <div class="flex items-center gap-1">
                 <i class="fas fa-lock text-xs mt-1"></i>
-                <h1 class="font-bold text-lg" id="username">carregando...</h1>
+                <h1 class="font-bold text-lg truncate" id="username">...</h1>
                 <i class="fas fa-chevron-down text-xs ml-1 text-gray-500"></i>
             </div>
             <div class="flex gap-5 text-xl items-center">
-                <i class="far fa-plus-square"></i>
-                <i class="fas fa-bars"></i>
+                <i class="far fa-plus-square hover:text-gray-600 cursor-pointer"></i>
+                <i class="fas fa-bars hover:text-gray-600 cursor-pointer"></i>
             </div>
         </div>
 
         <!-- Espaçador para compensar a barra fixa -->
-        <div class="h-14"></div>
+        <div class="h-16"></div>
 
         <!-- CONTEÚDO SCROLLÁVEL -->
-        <div class="flex-1 overflow-y-auto pb-24 w-full">
+        <div class="flex-1 w-full flex flex-col">
             
             <!-- CABEÇALHO DO PERFIL -->
-            <div class="px-4 pt-4 pb-2">
+            <div class="px-4 pt-2 pb-2">
                 <div class="flex items-center justify-between mb-4">
                     <!-- Foto -->
-                    <div class="story-ring w-24 h-24 flex-shrink-0 cursor-pointer">
+                    <div class="story-ring w-20 h-20 md:w-24 md:h-24 flex-shrink-0 cursor-pointer">
                         <img id="profile-img" src="" alt="Profile" class="w-full h-full rounded-full object-cover">
                     </div>
 
                     <!-- Números -->
-                    <div class="flex flex-1 justify-around text-center ml-4">
-                        <div>
-                            <div class="font-bold text-lg" id="posts-count">0</div>
-                            <div class="text-xs text-gray-500">Posts</div>
+                    <div class="flex flex-1 justify-around text-center ml-2 md:ml-6">
+                        <div class="cursor-pointer">
+                            <div class="font-bold text-lg md:text-xl" id="posts-count">0</div>
+                            <div class="text-xs md:text-sm text-gray-500">Posts</div>
                         </div>
-                        <div>
-                            <div class="font-bold text-lg" id="followers-count">0</div>
-                            <div class="text-xs text-gray-500">Seguidores</div>
+                        <div class="cursor-pointer">
+                            <div class="font-bold text-lg md:text-xl" id="followers-count">0</div>
+                            <div class="text-xs md:text-sm text-gray-500">Seguidores</div>
                         </div>
-                        <div>
-                            <div class="font-bold text-lg" id="following-count">0</div>
-                            <div class="text-xs text-gray-500">Seguindo</div>
+                        <div class="cursor-pointer">
+                            <div class="font-bold text-lg md:text-xl" id="following-count">0</div>
+                            <div class="text-xs md:text-sm text-gray-500">Seguindo</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Texto da Bio -->
-                <div class="mb-4">
-                    <h2 class="font-bold text-sm" id="display-name">...</h2>
-                    <div class="text-sm text-gray-800 whitespace-pre-line leading-tight mt-1" id="bio-text">...</div>
-                    <a href="#" class="text-blue-900 text-sm font-semibold mt-1 block hover:underline" id="bio-link">...</a>
+                <div class="mb-5">
+                    <h2 class="font-bold text-sm md:text-base" id="display-name">...</h2>
+                    <div class="text-sm md:text-base text-gray-800 whitespace-pre-line leading-snug mt-1" id="bio-text">...</div>
+                    <a href="#" class="text-blue-900 text-sm font-semibold mt-1 block hover:underline truncate" id="bio-link">...</a>
                 </div>
 
                 <!-- Botões de Ação -->
                 <div class="flex gap-2 mb-6 text-sm font-semibold">
-                    <button class="bg-gray-100 text-black rounded-lg py-1.5 flex-1 hover:bg-gray-200 transition">Seguir</button>
-                    <button class="bg-gray-100 text-black rounded-lg py-1.5 flex-1 hover:bg-gray-200 transition">Mensagem</button>
-                    <button class="bg-gray-100 text-black rounded-lg px-2 py-1.5 hover:bg-gray-200 transition"><i class="fas fa-user-plus"></i></button>
+                    <button class="bg-gray-100 text-black rounded-lg py-2 flex-1 hover:bg-gray-200 transition active:bg-gray-300">Seguir</button>
+                    <button class="bg-gray-100 text-black rounded-lg py-2 flex-1 hover:bg-gray-200 transition active:bg-gray-300">Mensagem</button>
+                    <button class="bg-gray-100 text-black rounded-lg px-3 py-2 hover:bg-gray-200 transition active:bg-gray-300"><i class="fas fa-user-plus"></i></button>
                 </div>
 
                 <!-- Destaques -->
-                <div class="flex gap-4 overflow-x-auto pb-2 mb-4 scrollbar-hide px-1" id="highlights-container">
+                <div class="flex gap-4 overflow-x-auto pb-2 mb-2 scrollbar-hide px-1" id="highlights-container">
                     <!-- JS Preenche aqui -->
                 </div>
             </div>
 
             <!-- DIVISOR -->
-            <div class="border-t border-gray-200 mb-2"></div>
+            <div class="border-t border-gray-100 mb-2"></div>
 
             <!-- ÁREA DE LINKS -->
-            <div class="px-4 flex flex-col gap-3 pb-8 w-full" id="links-wrapper">
+            <div class="px-4 flex flex-col gap-3 pb-24 w-full" id="links-wrapper">
                 <!-- Links JS -->
             </div>
             
@@ -151,12 +152,12 @@
         </div>
 
         <!-- MENU INFERIOR (Fixo) -->
-        <div class="fixed bottom-0 z-30 bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center fixed-width-constraint">
-            <i class="fas fa-home text-2xl text-black cursor-pointer hover:text-gray-600"></i>
-            <i class="fas fa-search text-2xl text-gray-300 cursor-pointer hover:text-gray-500"></i>
-            <i class="far fa-plus-square text-2xl text-gray-300 cursor-pointer hover:text-gray-500"></i>
-            <i class="fas fa-heart text-2xl text-gray-300 cursor-pointer hover:text-gray-500"></i>
-            <div class="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border border-black p-[1px] cursor-pointer">
+        <div class="fixed bottom-0 z-50 bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center fixed-constraint pb-safe">
+            <i class="fas fa-home text-2xl text-black cursor-pointer hover:scale-110 transition"></i>
+            <i class="fas fa-search text-2xl text-gray-300 cursor-pointer hover:text-gray-500 hover:scale-110 transition"></i>
+            <i class="far fa-plus-square text-2xl text-gray-300 cursor-pointer hover:text-gray-500 hover:scale-110 transition"></i>
+            <i class="fas fa-heart text-2xl text-gray-300 cursor-pointer hover:text-gray-500 hover:scale-110 transition"></i>
+            <div class="w-7 h-7 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border border-black p-[1px] cursor-pointer hover:scale-110 transition">
                 <img id="footer-img" src="" class="w-full h-full rounded-full">
             </div>
         </div>
@@ -165,9 +166,6 @@
 
     <!-- SCRIPT -->
     <script>
-        // ==========================================
-        //  CONFIGURAÇÃO
-        // ==========================================
         const perfil = {
             usuario: "Vagner_lauriuche",
             nome: "Vagner Lauriuche",
@@ -189,16 +187,16 @@
                         { titulo: "WhatsApp", subtitulo: "Fale comigo", url: "https://wa.me/5511999999999", icone: "fab fa-whatsapp", corIcone: "text-green-600", bgIcone: "bg-green-100" },
                         { titulo: "Instagram", subtitulo: "@Vagner_lauriuche", url: "https://instagram.com/Vagner_lauriuche", icone: "fab fa-instagram", corIcone: "text-pink-600", bgIcone: "bg-pink-100" },
                         { titulo: "Facebook", subtitulo: "Página Oficial", url: "https://facebook.com", icone: "fab fa-facebook", corIcone: "text-blue-700", bgIcone: "bg-blue-100" },
-                        { titulo: "Threads", subtitulo: "Conversas em texto", url: "https://threads.net", icone: "fa-brands fa-threads", corIcone: "text-black", bgIcone: "bg-gray-200" }
+                        { titulo: "Threads", subtitulo: "Conversas em texto", url: "https://threads.net", icone: "fa-brands fa-threads", corIcone: "text-black", bgIcone: "bg-gray-100" }
                     ]
                 },
                 {
                     titulo: "Vídeos & Criação",
                     icone: "fas fa-play-circle",
                     links: [
-                        { titulo: "TikTok", subtitulo: "Vídeos curtos", url: "https://tiktok.com", icone: "fab fa-tiktok", corIcone: "text-black", bgIcone: "bg-cyan-100" },
-                        { titulo: "Kwai", subtitulo: "Assista no Kwai", url: "https://kwai.com", icone: "fas fa-video", corIcone: "text-orange-500", bgIcone: "bg-orange-100" },
-                        { titulo: "YouTube", subtitulo: "Canal completo", url: "https://youtube.com", icone: "fab fa-youtube", corIcone: "text-red-600", bgIcone: "bg-red-100" }
+                        { titulo: "TikTok", subtitulo: "Vídeos curtos", url: "https://tiktok.com", icone: "fab fa-tiktok", corIcone: "text-black", bgIcone: "bg-cyan-50" },
+                        { titulo: "Kwai", subtitulo: "Assista no Kwai", url: "https://kwai.com", icone: "fas fa-video", corIcone: "text-orange-500", bgIcone: "bg-orange-50" },
+                        { titulo: "YouTube", subtitulo: "Canal completo", url: "https://youtube.com", icone: "fab fa-youtube", corIcone: "text-red-600", bgIcone: "bg-red-50" }
                     ]
                 },
                 {
@@ -213,13 +211,11 @@
                 { emoji: "🔥", texto: "Dicas" },
                 { emoji: "💼", texto: "Trabalho" },
                 { emoji: "✈️", texto: "Viagens" },
+                { emoji: "👤", texto: "Sobre mim" },
                 { emoji: "➕", texto: "Novo", especial: true }
             ]
         };
 
-        // ==========================================
-        //  RENDERIZAÇÃO
-        // ==========================================
         function renderizarPerfil() {
             document.getElementById('username').innerText = perfil.usuario;
             document.getElementById('display-name').innerText = perfil.nome;
@@ -241,21 +237,21 @@
             wrapper.innerHTML = ''; 
 
             perfil.categorias.forEach(categoria => {
-                const tituloHTML = `<div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mt-4 mb-2 uppercase tracking-widest border-b border-gray-100 pb-2"><i class="${categoria.icone}"></i> ${categoria.titulo}</div>`;
+                const tituloHTML = `<div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mt-5 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2"><i class="${categoria.icone}"></i> ${categoria.titulo}</div>`;
                 wrapper.innerHTML += tituloHTML;
                 const linksContainer = document.createElement('div');
                 linksContainer.className = 'flex flex-col gap-3 w-full';
                 categoria.links.forEach(link => {
                     const html = `
-                    <a href="${link.url}" target="_blank" class="link-card flex items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all w-full">
-                        <div class="w-10 h-10 ${link.bgIcone} ${link.corIcone} rounded-full flex items-center justify-center text-xl mr-3 flex-shrink-0">
+                    <a href="${link.url}" target="_blank" class="link-card flex items-center p-3.5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all w-full group">
+                        <div class="w-11 h-11 ${link.bgIcone} ${link.corIcone} rounded-full flex items-center justify-center text-xl mr-4 flex-shrink-0 group-hover:scale-110 transition-transform">
                             <i class="${link.icone}"></i>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="font-semibold text-sm truncate text-gray-900">${link.titulo}</div>
-                            <div class="text-xs text-gray-500 truncate">${link.subtitulo}</div>
+                            <div class="font-bold text-sm truncate text-gray-900 mb-0.5">${link.titulo}</div>
+                            <div class="text-xs text-gray-500 truncate font-medium">${link.subtitulo}</div>
                         </div>
-                        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+                        <i class="fas fa-chevron-right text-gray-300 text-sm group-hover:text-gray-500 transition-colors"></i>
                     </a>`;
                     linksContainer.innerHTML += html;
                 });
@@ -265,9 +261,9 @@
             const destaquesContainer = document.getElementById('highlights-container');
             destaquesContainer.innerHTML = '';
             perfil.destaques.forEach(destaque => {
-                const bordaClass = destaque.especial ? 'border-2 border-gray-100' : 'border border-gray-300';
-                const bgClass = destaque.especial ? 'bg-white border border-gray-300 text-gray-400' : 'bg-gray-100';
-                const html = `<div class="flex flex-col items-center gap-1 min-w-[64px] cursor-pointer hover:opacity-80 transition"><div class="w-16 h-16 rounded-full ${bordaClass} p-0.5"><div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-xl">${destaque.emoji}</div></div><span class="text-xs truncate w-16 text-center">${destaque.texto}</span></div>`;
+                const bordaClass = destaque.especial ? 'border-2 border-gray-200' : 'border border-gray-300';
+                const bgClass = destaque.especial ? 'bg-white text-gray-400' : 'bg-gray-50';
+                const html = `<div class="flex flex-col items-center gap-1 min-w-[70px] cursor-pointer hover:opacity-80 transition"><div class="w-[70px] h-[70px] rounded-full ${bordaClass} p-[2px]"><div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-2xl">${destaque.emoji}</div></div><span class="text-xs truncate w-full text-center mt-1 font-medium">${destaque.texto}</span></div>`;
                 destaquesContainer.innerHTML += html;
             });
         }
