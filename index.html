@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vagner Lauriuche | Bio</title>
-    <!-- Tailwind CSS (Estilos) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Ícones FontAwesome (Versão Atualizada para incluir Threads/TikTok) -->
+    <!-- Ícones FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <!-- Fontes Google -->
     <style>
@@ -14,10 +14,28 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #fafafa;
+            background-color: #f3f4f6; /* Cinza um pouco mais escuro para contraste */
+            overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+            margin: 0;
+            padding: 0;
         }
 
-        /* Classes Utilitárias Personalizadas */
+        /* Container Principal */
+        .mobile-container {
+            width: 100%;
+            max-width: 480px; /* Mantém o formato de "app" */
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            
+            /* Sombra suave nas laterais quando visto no PC */
+            box-shadow: 0 0 25px rgba(0,0,0,0.1); 
+        }
+
+        /* Classes Utilitárias */
         .story-ring {
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
             padding: 3px;
@@ -28,21 +46,10 @@
             background-color: white;
         }
 
-        .mobile-container {
-            max-width: 480px;
-            margin: 0 auto;
-            background-color: white;
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
         .link-card:active {
             transform: scale(0.98);
         }
         
-        /* Esconder scrollbar mas permitir scroll */
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
@@ -50,14 +57,23 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Ajuste para o rodapé e cabeçalho fixos não "vazarem" a largura */
+        .fixed-width-constraint {
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <div class="mobile-container relative">
+    <div class="mobile-container">
         
-        <!-- BARRA SUPERIOR -->
-        <div class="flex justify-between items-center px-4 py-3 border-b border-gray-100 sticky top-0 bg-white z-10">
+        <!-- BARRA SUPERIOR (Fixa) -->
+        <div class="fixed top-0 z-30 bg-white border-b border-gray-100 px-4 py-3 flex justify-between items-center fixed-width-constraint shadow-sm">
             <div class="flex items-center gap-1">
                 <i class="fas fa-lock text-xs mt-1"></i>
                 <h1 class="font-bold text-lg" id="username">carregando...</h1>
@@ -69,8 +85,11 @@
             </div>
         </div>
 
+        <!-- Espaçador para compensar a barra fixa -->
+        <div class="h-14"></div>
+
         <!-- CONTEÚDO SCROLLÁVEL -->
-        <div class="flex-1 overflow-y-auto pb-20">
+        <div class="flex-1 overflow-y-auto pb-24 w-full">
             
             <!-- CABEÇALHO DO PERFIL -->
             <div class="px-4 pt-4 pb-2">
@@ -101,10 +120,10 @@
                 <div class="mb-4">
                     <h2 class="font-bold text-sm" id="display-name">...</h2>
                     <div class="text-sm text-gray-800 whitespace-pre-line leading-tight mt-1" id="bio-text">...</div>
-                    <a href="#" class="text-blue-900 text-sm font-semibold mt-1 block" id="bio-link">...</a>
+                    <a href="#" class="text-blue-900 text-sm font-semibold mt-1 block hover:underline" id="bio-link">...</a>
                 </div>
 
-                <!-- Botões de Ação (Fake) -->
+                <!-- Botões de Ação -->
                 <div class="flex gap-2 mb-6 text-sm font-semibold">
                     <button class="bg-gray-100 text-black rounded-lg py-1.5 flex-1 hover:bg-gray-200 transition">Seguir</button>
                     <button class="bg-gray-100 text-black rounded-lg py-1.5 flex-1 hover:bg-gray-200 transition">Mensagem</button>
@@ -113,7 +132,7 @@
 
                 <!-- Destaques -->
                 <div class="flex gap-4 overflow-x-auto pb-2 mb-4 scrollbar-hide px-1" id="highlights-container">
-                    <!-- Preenchido via JS -->
+                    <!-- JS Preenche aqui -->
                 </div>
             </div>
 
@@ -121,8 +140,8 @@
             <div class="border-t border-gray-200 mb-2"></div>
 
             <!-- ÁREA DE LINKS -->
-            <div class="px-4 flex flex-col gap-3 pb-8" id="links-wrapper">
-                <!-- Os links serão inseridos aqui pelo JS, organizados por categorias -->
+            <div class="px-4 flex flex-col gap-3 pb-8 w-full" id="links-wrapper">
+                <!-- Links JS -->
             </div>
             
             <!-- Créditos -->
@@ -131,28 +150,28 @@
             </div>
         </div>
 
-        <!-- MENU INFERIOR FIXO -->
-        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center z-20 max-w-[480px] mx-auto">
-            <i class="fas fa-home text-2xl text-black"></i>
-            <i class="fas fa-search text-2xl text-gray-300"></i>
-            <i class="far fa-plus-square text-2xl text-gray-300"></i>
-            <i class="fas fa-heart text-2xl text-gray-300"></i>
-            <div class="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border border-black p-[1px]">
+        <!-- MENU INFERIOR (Fixo) -->
+        <div class="fixed bottom-0 z-30 bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center fixed-width-constraint">
+            <i class="fas fa-home text-2xl text-black cursor-pointer hover:text-gray-600"></i>
+            <i class="fas fa-search text-2xl text-gray-300 cursor-pointer hover:text-gray-500"></i>
+            <i class="far fa-plus-square text-2xl text-gray-300 cursor-pointer hover:text-gray-500"></i>
+            <i class="fas fa-heart text-2xl text-gray-300 cursor-pointer hover:text-gray-500"></i>
+            <div class="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border border-black p-[1px] cursor-pointer">
                 <img id="footer-img" src="" class="w-full h-full rounded-full">
             </div>
         </div>
 
     </div>
 
-    <!-- SCRIPT DE CONFIGURAÇÃO (EDITE AQUI) -->
+    <!-- SCRIPT -->
     <script>
         // ==========================================
-        //  ÁREA DE CONFIGURAÇÃO - EDITE OS DADOS AQUI
+        //  CONFIGURAÇÃO
         // ==========================================
         const perfil = {
             usuario: "Vagner_lauriuche",
             nome: "Vagner Lauriuche",
-            imagem: "foto.png", // Certifique-se de ter o arquivo foto.png na pasta
+            imagem: "foto.png", 
             posts: "1.2k",
             seguidores: "5M",
             seguindo: "500",
@@ -162,93 +181,34 @@
 👇 Clique nos links abaixo para saber mais!`,
             linkBio: "link.da.bio/vagner",
             
-            // CATEGORIAS DE LINKS
             categorias: [
                 {
                     titulo: "Contato & Redes Sociais",
                     icone: "fas fa-users",
                     links: [
-                        {
-                            titulo: "WhatsApp",
-                            subtitulo: "Fale comigo",
-                            url: "https://wa.me/5511999999999", 
-                            icone: "fab fa-whatsapp",
-                            corIcone: "text-green-600",
-                            bgIcone: "bg-green-100"
-                        },
-                        {
-                            titulo: "Instagram",
-                            subtitulo: "@Vagner_lauriuche",
-                            url: "https://instagram.com/Vagner_lauriuche",
-                            icone: "fab fa-instagram",
-                            corIcone: "text-pink-600",
-                            bgIcone: "bg-pink-100"
-                        },
-                        {
-                            titulo: "Facebook",
-                            subtitulo: "Página Oficial",
-                            url: "https://facebook.com",
-                            icone: "fab fa-facebook",
-                            corIcone: "text-blue-700",
-                            bgIcone: "bg-blue-100"
-                        },
-                        {
-                            titulo: "Threads",
-                            subtitulo: "Conversas em texto",
-                            url: "https://threads.net",
-                            icone: "fa-brands fa-threads",
-                            corIcone: "text-black",
-                            bgIcone: "bg-gray-200"
-                        }
+                        { titulo: "WhatsApp", subtitulo: "Fale comigo", url: "https://wa.me/5511999999999", icone: "fab fa-whatsapp", corIcone: "text-green-600", bgIcone: "bg-green-100" },
+                        { titulo: "Instagram", subtitulo: "@Vagner_lauriuche", url: "https://instagram.com/Vagner_lauriuche", icone: "fab fa-instagram", corIcone: "text-pink-600", bgIcone: "bg-pink-100" },
+                        { titulo: "Facebook", subtitulo: "Página Oficial", url: "https://facebook.com", icone: "fab fa-facebook", corIcone: "text-blue-700", bgIcone: "bg-blue-100" },
+                        { titulo: "Threads", subtitulo: "Conversas em texto", url: "https://threads.net", icone: "fa-brands fa-threads", corIcone: "text-black", bgIcone: "bg-gray-200" }
                     ]
                 },
                 {
                     titulo: "Vídeos & Criação",
                     icone: "fas fa-play-circle",
                     links: [
-                        {
-                            titulo: "TikTok",
-                            subtitulo: "Vídeos curtos",
-                            url: "https://tiktok.com",
-                            icone: "fab fa-tiktok",
-                            corIcone: "text-black",
-                            bgIcone: "bg-cyan-100" // TikTok tem cores cyan/pink, usei um fundo leve
-                        },
-                        {
-                            titulo: "Kwai",
-                            subtitulo: "Assista no Kwai",
-                            url: "https://kwai.com",
-                            icone: "fas fa-video", // Ícone genérico de vídeo (Kwai não tem ícone FA padrão)
-                            corIcone: "text-orange-500",
-                            bgIcone: "bg-orange-100"
-                        },
-                        {
-                            titulo: "YouTube",
-                            subtitulo: "Canal completo",
-                            url: "https://youtube.com",
-                            icone: "fab fa-youtube",
-                            corIcone: "text-red-600",
-                            bgIcone: "bg-red-100"
-                        }
+                        { titulo: "TikTok", subtitulo: "Vídeos curtos", url: "https://tiktok.com", icone: "fab fa-tiktok", corIcone: "text-black", bgIcone: "bg-cyan-100" },
+                        { titulo: "Kwai", subtitulo: "Assista no Kwai", url: "https://kwai.com", icone: "fas fa-video", corIcone: "text-orange-500", bgIcone: "bg-orange-100" },
+                        { titulo: "YouTube", subtitulo: "Canal completo", url: "https://youtube.com", icone: "fab fa-youtube", corIcone: "text-red-600", bgIcone: "bg-red-100" }
                     ]
                 },
                 {
                     titulo: "Outros",
                     icone: "fas fa-link",
                     links: [
-                        {
-                            titulo: "Meu Site",
-                            subtitulo: "Portfólio",
-                            url: "https://google.com",
-                            icone: "fas fa-globe",
-                            corIcone: "text-blue-500",
-                            bgIcone: "bg-blue-50"
-                        }
+                        { titulo: "Meu Site", subtitulo: "Portfólio", url: "https://google.com", icone: "fas fa-globe", corIcone: "text-blue-500", bgIcone: "bg-blue-50" }
                     ]
                 }
             ],
-
-            // DESTAQUES (Bolinhas redondas)
             destaques: [
                 { emoji: "🔥", texto: "Dicas" },
                 { emoji: "💼", texto: "Trabalho" },
@@ -258,10 +218,9 @@
         };
 
         // ==========================================
-        //  LÓGICA DO SISTEMA
+        //  RENDERIZAÇÃO
         // ==========================================
         function renderizarPerfil() {
-            // Textos básicos
             document.getElementById('username').innerText = perfil.usuario;
             document.getElementById('display-name').innerText = perfil.nome;
             document.getElementById('posts-count').innerText = perfil.posts;
@@ -270,43 +229,25 @@
             document.getElementById('bio-text').innerText = perfil.bio;
             document.getElementById('bio-link').innerText = perfil.linkBio;
             
-            // Imagens
             const imgProfile = document.getElementById('profile-img');
             const imgFooter = document.getElementById('footer-img');
             
-            const setImages = (src) => {
-                imgProfile.src = src;
-                imgFooter.src = src;
-            };
-
-            imgProfile.onerror = function() {
-                this.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner";
-                imgFooter.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner";
-            };
-
-            setImages(perfil.imagem);
+            imgProfile.onerror = function() { this.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner"; imgFooter.src = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner"; };
+            imgProfile.src = perfil.imagem;
+            imgFooter.src = perfil.imagem;
             document.title = `${perfil.nome} (@${perfil.usuario})`;
 
-            // RENDERIZAR LINKS POR CATEGORIA
             const wrapper = document.getElementById('links-wrapper');
             wrapper.innerHTML = ''; 
 
             perfil.categorias.forEach(categoria => {
-                // Título da Categoria
-                const tituloHTML = `
-                    <div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mt-4 mb-2 uppercase tracking-widest border-b border-gray-100 pb-2">
-                        <i class="${categoria.icone}"></i> ${categoria.titulo}
-                    </div>
-                `;
+                const tituloHTML = `<div class="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mt-4 mb-2 uppercase tracking-widest border-b border-gray-100 pb-2"><i class="${categoria.icone}"></i> ${categoria.titulo}</div>`;
                 wrapper.innerHTML += tituloHTML;
-
-                // Links da Categoria
                 const linksContainer = document.createElement('div');
-                linksContainer.className = 'flex flex-col gap-3';
-                
+                linksContainer.className = 'flex flex-col gap-3 w-full';
                 categoria.links.forEach(link => {
                     const html = `
-                    <a href="${link.url}" target="_blank" class="link-card flex items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all">
+                    <a href="${link.url}" target="_blank" class="link-card flex items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all w-full">
                         <div class="w-10 h-10 ${link.bgIcone} ${link.corIcone} rounded-full flex items-center justify-center text-xl mr-3 flex-shrink-0">
                             <i class="${link.icone}"></i>
                         </div>
@@ -315,35 +256,21 @@
                             <div class="text-xs text-gray-500 truncate">${link.subtitulo}</div>
                         </div>
                         <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
-                    </a>
-                    `;
+                    </a>`;
                     linksContainer.innerHTML += html;
                 });
                 wrapper.appendChild(linksContainer);
             });
 
-            // Renderizar Destaques
             const destaquesContainer = document.getElementById('highlights-container');
             destaquesContainer.innerHTML = '';
-
             perfil.destaques.forEach(destaque => {
                 const bordaClass = destaque.especial ? 'border-2 border-gray-100' : 'border border-gray-300';
                 const bgClass = destaque.especial ? 'bg-white border border-gray-300 text-gray-400' : 'bg-gray-100';
-                
-                const html = `
-                <div class="flex flex-col items-center gap-1 min-w-[64px] cursor-pointer hover:opacity-80 transition">
-                    <div class="w-16 h-16 rounded-full ${bordaClass} p-0.5">
-                        <div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-xl">
-                            ${destaque.emoji}
-                        </div>
-                    </div>
-                    <span class="text-xs truncate w-16 text-center">${destaque.texto}</span>
-                </div>
-                `;
+                const html = `<div class="flex flex-col items-center gap-1 min-w-[64px] cursor-pointer hover:opacity-80 transition"><div class="w-16 h-16 rounded-full ${bordaClass} p-0.5"><div class="w-full h-full ${bgClass} rounded-full flex items-center justify-center text-xl">${destaque.emoji}</div></div><span class="text-xs truncate w-16 text-center">${destaque.texto}</span></div>`;
                 destaquesContainer.innerHTML += html;
             });
         }
-
         document.addEventListener('DOMContentLoaded', renderizarPerfil);
     </script>
 </body>
