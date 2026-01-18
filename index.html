@@ -342,6 +342,22 @@
                         <p>Além disso, como <strong>Visual Content Creator</strong>, compartilho essa paixão através de conteúdos digitais que informam e inspiram.</p>
                     `
                 },
+                { 
+                    id: 'cursos', 
+                    emoji: "🎓", 
+                    texto: "Cursos",
+                    conteudo: `
+                        <p class="mb-4 text-gray-600">Invista no seu conhecimento com estes cursos recomendados:</p>
+                        <div class="flex flex-col gap-3">
+                            <a href="https://kiwify.app/p5jTccC?afid=8UCMgMdG" target="_blank" class="bg-green-500 text-white py-3 rounded-lg font-bold shadow hover:bg-green-600 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-book-open"></i> Fórmula Youtube Viral
+                            </a>
+                            <a href="https://kiwify.app/4ebavr1?afid=TYHkKSYE" target="_blank" class="bg-green-500 text-white py-3 rounded-lg font-bold shadow hover:bg-green-600 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-graduation-cap"></i> Hype AI - Básico Mensal
+                            </a>
+                        </div>
+                    `
+                },
                 { id: 'novo', emoji: "➕", texto: "Novo", especial: true }
             ]
         };
@@ -433,7 +449,7 @@
             title.innerText = destaque.texto;
 
             // Configura o corpo
-            if (destaque.id === 'sobre' && destaque.conteudo) {
+            if (destaque.conteudo) {
                 body.innerHTML = destaque.conteudo;
             } else if (destaque.id === 'novo') {
                 body.innerHTML = "Adicione novos destaques em breve!";
@@ -455,5 +471,6 @@
     </script>
 </body>
 </html>
+
 
 
