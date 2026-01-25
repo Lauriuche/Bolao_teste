@@ -23,22 +23,15 @@
         /* Container Principal */
         .main-container {
             width: 100%;
-            max-width: 500px; /* Largura máxima ideal para emular celular no PC */
+            max-width: 500px;
             margin: 0 auto;
             position: relative;
             background-color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            /* Sombra suave apenas no Desktop */
-            box-shadow: 0 0 0px rgba(0,0,0,0);
-        }
-        @media (min-width: 500px) {
-            .main-container {
-                box-shadow: 0 0 30px rgba(0,0,0,0.05);
-                border-left: 1px solid #f0f0f0;
-                border-right: 1px solid #f0f0f0;
-            }
+            box-shadow: none !important;
+            border: none !important;
         }
 
         /* Constraints Fixos */
@@ -50,7 +43,7 @@
             right: 0;
         }
 
-        /* Story Ring (Gradiente do Insta) */
+        /* Story Ring */
         .story-ring {
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
             padding: 2px;
@@ -104,9 +97,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.85); /* Fundo escuro estilo Story */
+            background-color: rgba(0, 0, 0, 0.85);
             z-index: 100;
-            display: none; /* Escondido por padrão */
+            display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -122,6 +115,9 @@
             position: relative;
             animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh; 
         }
 
         @keyframes modalPop {
@@ -144,6 +140,54 @@
             z-index: 10;
         }
 
+        /* Estilos do Chat */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 150px; 
+        }
+        .chat-bubble {
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            max-width: 85%;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .chat-bubble.user {
+            background-color: #3b82f6;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .chat-bubble.ai {
+            background-color: #e5e7eb;
+            color: black;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        .chat-bubble.system {
+            background-color: #fef3c7;
+            color: #92400e;
+            align-self: center;
+            font-size: 12px;
+            text-align: center;
+            border-radius: 8px;
+            max-width: 90%;
+        }
+        .typing-indicator {
+            font-size: 12px;
+            color: #6b7280;
+            margin-left: 10px;
+            display: none;
+            font-style: italic;
+        }
+
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -152,7 +196,7 @@
 
     <div class="main-container">
         
-        <!-- BARRA SUPERIOR (Nome do Usuário) -->
+        <!-- BARRA SUPERIOR -->
         <div class="fixed top-0 z-50 bg-white/98 backdrop-blur-sm border-b border-gray-100 px-4 py-2 flex justify-between items-center fixed-constraint h-[44px]">
             <div class="flex items-center gap-1">
                 <i class="fas fa-lock text-[10px] mt-0.5"></i>
@@ -165,7 +209,7 @@
             </div>
         </div>
 
-        <div class="h-[44px]"></div> <!-- Espaçador -->
+        <div class="h-[44px]"></div>
 
         <!-- CONTEÚDO -->
         <div class="flex-1 w-full flex flex-col">
@@ -173,7 +217,7 @@
             <!-- CABEÇALHO DO PERFIL -->
             <div class="px-4 pt-3 pb-2">
                 <div class="flex items-center justify-between mb-3">
-                    <!-- Foto (Aumentada em ~20%) -->
+                    <!-- Foto -->
                     <div class="story-ring w-[104px] h-[104px] flex-shrink-0 cursor-pointer">
                         <img id="profile-img" src="" alt="Profile" class="w-full h-full rounded-full object-cover">
                     </div>
@@ -197,16 +241,16 @@
 
                 <!-- Bio -->
                 <div class="mb-4">
-                    <!-- Nome aumentado para text-lg (maior destaque) -->
                     <h2 class="font-bold text-lg" id="display-name">...</h2>
                     <div class="text-sm text-gray-900 whitespace-pre-line leading-tight mt-0.5" id="bio-text">...</div>
-                    <a href="#" class="text-[#00376b] text-sm font-semibold mt-0.5 block truncate" id="bio-link">...</a>
+                    <a href="#" class="text-[#00376b] text-sm font-semibold mt-0.5 block truncate hidden" id="bio-link">...</a>
                 </div>
 
                 <!-- Botões de Ação -->
                 <div class="flex gap-2 mb-4">
                     <button class="action-btn flex-1 py-1.5">Seguir</button>
-                    <button class="action-btn flex-1 py-1.5">Mensagem</button>
+                    <!-- BOTÃO MENSAGEM COM FUNÇÃO DM -->
+                    <button onclick="abrirDM()" class="action-btn flex-1 py-1.5 bg-gray-100 hover:bg-gray-200 text-black">Mensagem</button>
                     <button class="action-btn px-2 py-1.5"><i class="fas fa-user-plus text-xs"></i></button>
                 </div>
 
@@ -216,7 +260,7 @@
                 </div>
             </div>
 
-            <!-- MENU DE ABAS (Grid, Reels, Tags) -->
+            <!-- MENU DE ABAS -->
             <div class="flex border-t border-gray-200 mt-2 sticky top-[44px] bg-white z-40">
                 <div class="flex-1 flex justify-center items-center py-2.5 nav-tab active">
                     <i class="fas fa-th text-lg"></i>
@@ -229,21 +273,33 @@
                 </div>
             </div>
 
-            <!-- CONTEÚDO DA ABA (Links em Formato de Lista) -->
+            <!-- CONTEÚDO DA ABA -->
             <div class="bg-white min-h-[300px]">
-                <!-- Lista de Links -->
                 <div class="px-0 flex flex-col" id="links-wrapper">
                     <!-- Links serão inseridos aqui -->
                 </div>
 
-                <!-- Créditos Rodapé -->
                 <div class="text-center py-10">
                     <p class="text-gray-300 text-[10px] uppercase tracking-wider font-semibold">© 2026 Vagner Lauriuche</p>
                 </div>
             </div>
         </div>
 
-        <!-- BARRA INFERIOR (Footer App) -->
+        <!-- BOTÃO FLUTUANTE ASSISTENTE IA -->
+        <div class="fixed bottom-16 right-0 z-40 px-6 mb-2 fixed-constraint flex justify-end pointer-events-none">
+            <button onclick="abrirModalPorId('chat-ai')" class="pointer-events-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 relative group">
+                <span class="absolute top-0 right-0 flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                </span>
+                <i class="fas fa-comment-dots text-2xl"></i>
+                <span class="absolute right-full mr-3 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Assistente IA
+                </span>
+            </button>
+        </div>
+
+        <!-- BARRA INFERIOR -->
         <div class="fixed bottom-0 z-50 bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center fixed-constraint pb-safe">
             <i class="fas fa-home text-2xl text-black"></i>
             <i class="fas fa-search text-2xl text-gray-500"></i>
@@ -263,30 +319,65 @@
                 <i class="fas fa-times text-gray-600"></i>
             </div>
             
-            <!-- Cabeçalho do Modal -->
-            <div class="h-32 bg-gradient-to-tr from-orange-400 to-pink-600 flex items-center justify-center relative">
+            <!-- Cabeçalho -->
+            <div class="h-32 bg-gradient-to-tr from-orange-400 to-pink-600 flex items-center justify-center relative flex-shrink-0">
                 <div class="absolute -bottom-8 w-20 h-20 rounded-full p-1 shadow-md bg-white">
                     <div class="w-full h-full bg-gray-100 rounded-full flex items-center justify-center overflow-hidden" id="modal-icon-container">
-                        <!-- Imagem do Perfil via JS -->
+                        <!-- Foto -->
                     </div>
                 </div>
             </div>
 
-            <!-- Corpo do Modal -->
-            <div class="pt-10 pb-8 px-6 text-center">
+            <!-- Corpo Normal -->
+            <div id="modal-body-container" class="pt-10 pb-8 px-6 text-center">
                 <h3 class="text-xl font-bold mb-3" id="modal-title">Titulo</h3>
-                <div class="text-gray-600 text-sm leading-relaxed" id="modal-body">
-                    Texto
-                </div>
-                <button onclick="fecharModal(event)" class="mt-6 w-full bg-black text-white py-2.5 rounded-lg font-semibold text-sm active:scale-95 transition">
-                    Fechar
+                <div class="text-gray-600 text-sm leading-relaxed" id="modal-body">Texto</div>
+                <button onclick="fecharModal(event)" class="mt-6 w-full bg-black text-white py-2.5 rounded-lg font-semibold text-sm active:scale-95 transition">Fechar</button>
+            </div>
+
+            <!-- Corpo DM (Mensagem Direta) -->
+            <div id="dm-interface" class="hidden flex-col h-auto p-6 text-center pt-10">
+                <h3 class="font-bold text-lg mb-2">Enviar Mensagem</h3>
+                <p class="text-gray-500 text-xs mb-6">Escreva sua mensagem abaixo para enviar via WhatsApp.</p>
+                
+                <textarea id="dm-text" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-blue-100 mb-4 resize-none h-32" placeholder="Olá Vagner, gostaria de falar sobre..."></textarea>
+                
+                <button onclick="enviarDMWhatsApp()" class="w-full bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-green-600 transition flex items-center justify-center gap-2 active:scale-95">
+                    <i class="fab fa-whatsapp text-lg"></i> Enviar no WhatsApp
                 </button>
             </div>
+
+            <!-- Corpo Chat IA -->
+            <div id="chat-interface" class="hidden flex-col flex-1 min-h-0 overflow-hidden bg-white">
+                <div class="pt-10 px-4 pb-2 text-center border-b border-gray-100 bg-white flex-shrink-0">
+                    <h3 class="font-bold text-lg">✨ Assistente IA</h3>
+                    <p class="text-xs text-gray-500" id="chat-status">Pergunte sobre meus cursos e experiência!</p>
+                </div>
+                
+                <div id="chat-messages" class="chat-container flex-1 overflow-y-auto">
+                    <div class="chat-bubble ai">Olá! Sou a IA do Vagner. Como posso ajudar?</div>
+                </div>
+                <div id="typing-indicator" class="typing-indicator pb-2 px-4 bg-f9fafb">A escrever...</div>
+
+                <div class="p-3 border-t border-gray-200 bg-white flex gap-2 flex-shrink-0 pb-safe">
+                    <input type="text" id="chat-input" placeholder="Escreva uma mensagem..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100 border border-gray-200" onkeypress="handleEnter(event)">
+                    <button onclick="processarEnvio()" class="bg-blue-600 text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-blue-700 active:scale-95 transition shadow-sm">
+                        <i class="fas fa-paper-plane text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- SCRIPT DE DADOS -->
+    <!-- SCRIPT -->
     <script>
+        // --- CONFIGURAÇÃO ---
+        const apiKey = "AIzaSyBDsKzgw47DosmKPxGR0-32HdylY0EF9uM"; 
+
+        // VARIÁVEIS DE ESTADO DO CHAT
+        let esperandoChaveAPI = false;
+
         const perfil = {
             usuario: "Vagner_lauriuche",
             nome: "Vagner Lauriuche",
@@ -299,7 +390,7 @@
 • 🧪|MBA Agronegocios: Indústria, Produto e Inovação
 • 📊|ADM - Administração 
 • ✨|𝐕𝐂𝐂: 𝐕𝐢𝐬𝐮𝐚𝐥 𝐂𝐨𝐧𝐭𝐞𝐧𝐭 𝐂𝐫𝐞𝐚𝐭𝐨𝐫`,
-            linkBio: "link.da.bio/vagner",
+            linkBio: "", 
             
             categorias: [
                 {
@@ -321,9 +412,9 @@
                     ]
                 },
                 {
-                    titulo: "Outros",
+                    titulo: "Portfólio", 
                     links: [
-                        { titulo: "Meu Site", subtitulo: "Portfólio", url: "https://google.com", icone: "fas fa-globe", corIcone: "text-white", bgIcone: "bg-gray-800" }
+                        { titulo: "Meus Cursos & Portfólio", subtitulo: "Veja a lista completa de cursos", url: "#", modalId: "cursos", icone: "fas fa-graduation-cap", corIcone: "text-white", bgIcone: "bg-green-600" }
                     ]
                 }
             ],
@@ -336,10 +427,24 @@
                     emoji: "👤", 
                     texto: "Sobre mim", 
                     conteudo: `
-                        <p class="mb-3">Olá! Sou <strong>Vagner Lauriuche</strong>.</p>
-                        <p class="mb-3">Sou um profissional apaixonado pelo <strong>Agronegócio</strong> e pela inovação no campo. Minha formação une a técnica da <strong>Zootecnia</strong> com a visão estratégica da <strong>Administração</strong>.</p>
-                        <p class="mb-3">Com MBAs em Indústria, Produto e Inovação, dedico-me a transformar conhecimento técnico em resultados práticos.</p>
-                        <p>Além disso, como <strong>Visual Content Creator</strong>, compartilho essa paixão através de conteúdos digitais que informam e inspiram.</p>
+                        <div class="text-left">
+                            <p class="mb-4 leading-relaxed">Olá! Sou <strong>Vagner Lauriuche</strong>, um profissional multidisciplinar que conecta a ciência do campo à inovação digital.</p>
+                            
+                            <div class="mb-4 bg-blue-50 p-3 rounded-lg border border-blue-100">
+                                <h4 class="font-bold text-blue-700 mb-2 text-sm uppercase tracking-wide"><i class="fas fa-user-graduate mr-1"></i> Formação Académica</h4>
+                                <ul class="text-sm space-y-1.5 text-gray-700">
+                                    <li>• Bacharel em <strong>Zootecnia</strong> 🐄</li>
+                                    <li>• MBA em <strong>Agronegócios</strong> 🚜</li>
+                                    <li>• MBA em <strong>Indústria, Produto e Inovação</strong> 🧪</li>
+                                    <li>• Graduado em <strong>Administração</strong> 📊</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-purple-50 p-3 rounded-lg border border-purple-100">
+                                <h4 class="font-bold text-purple-700 mb-1 text-sm uppercase tracking-wide"><i class="fas fa-camera-retro mr-1"></i> Visual Content Creator</h4>
+                                <p class="text-sm text-gray-700 leading-snug">Transformo conhecimento técnico em conteúdo visual de alto impacto, ajudando a comunicar valor de forma assertiva e criativa no mundo digital. ✨</p>
+                            </div>
+                        </div>
                     `
                 },
                 { 
@@ -347,13 +452,19 @@
                     emoji: "🎓", 
                     texto: "Cursos",
                     conteudo: `
-                        <p class="mb-4 text-gray-600">Invista no seu conhecimento com estes cursos recomendados:</p>
+                        <p class="mb-4 text-gray-600 font-medium">Invista no seu conhecimento com estes cursos recomendados:</p>
                         <div class="flex flex-col gap-3">
-                            <a href="https://kiwify.app/p5jTccC?afid=8UCMgMdG" target="_blank" class="bg-green-500 text-white py-3 rounded-lg font-bold shadow hover:bg-green-600 transition flex items-center justify-center gap-2">
-                                <i class="fas fa-book-open"></i> Fórmula Youtube Viral
+                            <a href="https://kiwify.app/p5jTccC?afid=8UCMgMdG" target="_blank" class="bg-gradient-to-r from-green-500 to-green-600 text-white py-3.5 rounded-lg font-bold shadow-md hover:shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-play-circle"></i> Fórmula Youtube Viral
                             </a>
-                            <a href="https://kiwify.app/4ebavr1?afid=TYHkKSYE" target="_blank" class="bg-green-500 text-white py-3 rounded-lg font-bold shadow hover:bg-green-600 transition flex items-center justify-center gap-2">
-                                <i class="fas fa-graduation-cap"></i> Hype AI - Básico Mensal
+                            <a href="https://kiwify.app/4ebavr1?afid=TYHkKSYE" target="_blank" class="bg-gradient-to-r from-green-500 to-green-600 text-white py-3.5 rounded-lg font-bold shadow-md hover:shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-robot"></i> Hype AI - Básico Mensal
+                            </a>
+                            <a href="https://kiwify.app/2pCGGUH?afid=w0RKQQXF" target="_blank" class="bg-gradient-to-r from-green-500 to-green-600 text-white py-3.5 rounded-lg font-bold shadow-md hover:shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-apple-alt"></i> Desafio NATHNUTRI 6.0
+                            </a>
+                            <a href="https://pay.kiwify.com.br/K5f7UxX?afid=MWmhG5b4" target="_blank" class="bg-gradient-to-r from-green-500 to-green-600 text-white py-3.5 rounded-lg font-bold shadow-md hover:shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-dumbbell"></i> CURSO TREINAMENTO FUNCIONAL
                             </a>
                         </div>
                     `
@@ -369,12 +480,19 @@
             document.getElementById('followers-count').innerText = perfil.seguidores;
             document.getElementById('following-count').innerText = perfil.seguindo;
             document.getElementById('bio-text').innerText = perfil.bio;
-            document.getElementById('bio-link').innerText = perfil.linkBio;
+            
+            const bioLinkElement = document.getElementById('bio-link');
+            if (perfil.linkBio) {
+                bioLinkElement.innerText = perfil.linkBio;
+                bioLinkElement.href = "https://" + perfil.linkBio;
+                bioLinkElement.classList.remove('hidden');
+            } else {
+                bioLinkElement.classList.add('hidden');
+            }
             
             const imgProfile = document.getElementById('profile-img');
             const imgFooter = document.getElementById('footer-img');
             
-            // Fallback de imagem
             const fallback = "https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner";
             imgProfile.onerror = function() { this.src = fallback; imgFooter.src = fallback; };
             imgProfile.src = perfil.imagem;
@@ -385,7 +503,6 @@
             wrapper.innerHTML = ''; 
 
             perfil.categorias.forEach((categoria, index) => {
-                // Separador de categoria estilo Insta (Header cinza claro)
                 if(index >= 0) {
                      const header = `
                         <div class="px-4 py-2 bg-gray-50 border-b border-t border-gray-100 flex items-center gap-2 mt-0">
@@ -396,8 +513,14 @@
                 }
 
                 categoria.links.forEach(link => {
+                    const isModalLink = link.modalId ? true : false;
+                    const hrefAttr = isModalLink ? 'javascript:void(0)' : link.url;
+                    const onclickAttr = isModalLink ? `onclick="abrirModalPorId('${link.modalId}')"` : '';
+                    const targetAttr = isModalLink ? '' : 'target="_blank"';
+                    const iconChevron = isModalLink ? 'fa-expand-alt' : 'fa-chevron-right';
+
                     const html = `
-                    <a href="${link.url}" target="_blank" class="link-item flex items-center px-4 py-3 bg-white border-b border-gray-100 hover:bg-gray-50">
+                    <a href="${hrefAttr}" ${targetAttr} ${onclickAttr} class="link-item flex items-center px-4 py-3 bg-white border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
                         <div class="w-10 h-10 ${link.bgIcone} ${link.corIcone} rounded-full flex items-center justify-center text-lg mr-3 shadow-sm flex-shrink-0">
                             <i class="${link.icone}"></i>
                         </div>
@@ -405,7 +528,7 @@
                             <div class="font-semibold text-sm text-gray-900 leading-tight">${link.titulo}</div>
                             <div class="text-[12px] text-gray-500 leading-tight mt-0.5">${link.subtitulo}</div>
                         </div>
-                        <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                        <i class="fas ${iconChevron} text-gray-300 text-xs"></i>
                     </a>`;
                     wrapper.innerHTML += html;
                 });
@@ -414,14 +537,13 @@
             const destaquesContainer = document.getElementById('highlights-container');
             destaquesContainer.innerHTML = '';
             
-            // Renderização dos Destaques com Click
             perfil.destaques.forEach(destaque => {
                 const bordaClass = destaque.especial ? 'border border-gray-300' : 'border border-gray-200';
                 const bgClass = destaque.especial ? 'bg-white text-gray-800' : 'bg-gray-50 text-gray-800';
                 
                 const destaqueElement = document.createElement('div');
                 destaqueElement.className = "flex flex-col items-center gap-1 min-w-[68px] cursor-pointer hover:opacity-80 transition";
-                destaqueElement.onclick = () => abrirModal(destaque); // Evento de Click
+                destaqueElement.onclick = () => abrirModal(destaque);
 
                 destaqueElement.innerHTML = `
                     <div class="w-[64px] h-[64px] rounded-full border border-gray-200 p-[2px]">
@@ -435,42 +557,193 @@
             });
         }
 
-        // Funções do Modal
-        function abrirModal(destaque) {
+        function abrirModalPorId(id) {
+            if(id === 'chat-ai') {
+                abrirModal({id: 'chat-ai', texto: 'Assistente IA', emoji: '🤖'});
+                return;
+            }
+            const destaque = perfil.destaques.find(d => d.id === id);
+            if (destaque) {
+                abrirModal(destaque);
+            }
+        }
+
+        function abrirDM() {
             const modal = document.getElementById('story-modal');
             const iconContainer = document.getElementById('modal-icon-container');
-            const title = document.getElementById('modal-title');
-            const body = document.getElementById('modal-body');
+            const modalBodyContainer = document.getElementById('modal-body-container');
+            const chatInterface = document.getElementById('chat-interface');
+            const dmInterface = document.getElementById('dm-interface');
 
-            // --- AQUI ESTÁ A MUDANÇA ---
-            // Em vez do emoji, usa a imagem do perfil
             iconContainer.innerHTML = `<img src="${perfil.imagem}" class="w-full h-full object-cover" onerror="this.src='https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner'">`;
-            
-            title.innerText = destaque.texto;
 
-            // Configura o corpo
-            if (destaque.conteudo) {
-                body.innerHTML = destaque.conteudo;
-            } else if (destaque.id === 'novo') {
-                body.innerHTML = "Adicione novos destaques em breve!";
-            } else {
-                body.innerHTML = `<p class="italic text-gray-400">Conteúdo de ${destaque.texto} em breve...</p>`;
-            }
+            modalBodyContainer.classList.add('hidden');
+            chatInterface.classList.add('hidden');
+            chatInterface.classList.remove('flex');
+            dmInterface.classList.remove('hidden');
+            dmInterface.classList.add('flex');
 
             modal.style.display = 'flex';
         }
 
+        function enviarDMWhatsApp() {
+            const text = document.getElementById('dm-text').value;
+            // Número de WhatsApp fixo para a função de DM
+            const phone = "5511999999999"; 
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+            window.open(whatsappUrl, '_blank');
+            fecharModal();
+        }
+
+        function abrirModal(destaque) {
+            const modal = document.getElementById('story-modal');
+            const iconContainer = document.getElementById('modal-icon-container');
+            const modalBodyContainer = document.getElementById('modal-body-container');
+            const chatInterface = document.getElementById('chat-interface');
+            const dmInterface = document.getElementById('dm-interface');
+            
+            iconContainer.innerHTML = `<img src="${perfil.imagem}" class="w-full h-full object-cover" onerror="this.src='https://api.dicebear.com/9.x/avataaars/svg?seed=Vagner'">`;
+
+            modalBodyContainer.classList.remove('hidden');
+            chatInterface.classList.add('hidden');
+            chatInterface.classList.remove('flex');
+            dmInterface.classList.add('hidden');
+            dmInterface.classList.remove('flex');
+
+            if (destaque.id === 'chat-ai') {
+                modalBodyContainer.classList.add('hidden');
+                chatInterface.classList.remove('hidden');
+                chatInterface.classList.add('flex');
+                verificarChaveAPI();
+            } else {
+                const title = document.getElementById('modal-title');
+                const body = document.getElementById('modal-body');
+                title.innerText = destaque.texto;
+                if (destaque.conteudo) {
+                    body.innerHTML = destaque.conteudo;
+                } else if (destaque.id === 'novo') {
+                    body.innerHTML = "Adicione novos destaques em breve!";
+                } else {
+                    body.innerHTML = `<p class="italic text-gray-400">Conteúdo de ${destaque.texto} em breve...</p>`;
+                }
+            }
+            modal.style.display = 'flex';
+        }
+
         function fecharModal(event) {
-            // Se clicar fora ou no botão fechar
             if (event) event.stopPropagation();
             const modal = document.getElementById('story-modal');
             modal.style.display = 'none';
+        }
+
+        // --- LÓGICA DO CHAT GEMINI ---
+        
+        function getAPIKey() {
+            if(apiKey && apiKey.length > 5) return apiKey;
+            return localStorage.getItem('gemini_api_key');
+        }
+
+        function verificarChaveAPI() {
+            const key = getAPIKey();
+            if (!key) {
+                adicionarBalao("⚠️ Atenção: Não detetei uma API Key no código. Para que eu possa responder, por favor cole a sua Google Gemini API Key aqui na conversa.", 'system');
+                esperandoChaveAPI = true;
+            } else {
+                esperandoChaveAPI = false;
+            }
+        }
+
+        async function processarEnvio() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            adicionarBalao(msg, 'user');
+            input.value = '';
+
+            if (esperandoChaveAPI) {
+                if (msg.length > 20) { 
+                    localStorage.setItem('gemini_api_key', msg);
+                    esperandoChaveAPI = false;
+                    adicionarBalao("✅ Chave guardada com sucesso! Agora podes perguntar-me qualquer coisa sobre o Vagner.", 'system');
+                    adicionarBalao("Obrigado! Em que posso ajudar agora?", 'ai');
+                } else {
+                    adicionarBalao("❌ Isso não parece uma chave válida. Tenta novamente.", 'system');
+                }
+                return;
+            }
+            
+            document.getElementById('typing-indicator').style.display = 'block';
+            const resposta = await chamarGemini(msg);
+            document.getElementById('typing-indicator').style.display = 'none';
+            adicionarBalao(resposta, 'ai');
+        }
+
+        async function chamarGemini(promptUsuario) {
+            const key = getAPIKey();
+            if (!key) return "Erro de configuração: Chave API em falta.";
+
+            const systemPrompt = `
+                Você é o assistente virtual do perfil profissional do Vagner Lauriuche.
+                Responda de forma curta, amigável e profissional (máximo 3 frases).
+                Use emojis ocasionalmente.
+                
+                DADOS DO VAGNER:
+                - Formação: Bacharel em Zootecnia, MBA em Agronegócios, MBA em Indústria/Produto/Inovação, Administração.
+                - Atuação: Visual Content Creator (VCC), Agronegócio.
+                - Redes Sociais: Instagram, Facebook, Threads, TikTok, Kwai, Youtube, Telegram.
+                - Cursos Recomendados: Fórmula Youtube Viral, Hype AI, Desafio NATHNUTRI, Treinamento Funcional.
+                
+                Se perguntarem algo fora desses tópicos, diga gentilmente que só sabe sobre o perfil do Vagner.
+            `;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${key}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: "user",
+                            parts: [{ text: promptUsuario }]
+                        }],
+                        systemInstruction: {
+                            parts: [{ text: systemPrompt }]
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    if(response.status === 400 || response.status === 403) {
+                        localStorage.removeItem('gemini_api_key'); 
+                        esperandoChaveAPI = true;
+                        return "A chave API parece inválida. Por favor, fornece uma nova chave.";
+                    }
+                    throw new Error('Falha na API');
+                }
+                
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, não entendi.";
+                
+            } catch (error) {
+                console.error(error);
+                return "Erro ao conectar com a IA. Verifica a tua internet ou a chave API.";
+            }
+        }
+
+        function adicionarBalao(texto, tipo) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `chat-bubble ${tipo}`;
+            div.innerText = texto;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') processarEnvio();
         }
 
         document.addEventListener('DOMContentLoaded', renderizarPerfil);
     </script>
 </body>
 </html>
-
-
-
